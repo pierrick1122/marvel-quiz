@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../Firebase/firebaseConfig';
+import { Link, useNavigate } from 'react-router-dom';
 
-const SignUp = () => {
+const SignUp = (props) => {
 
   const data = {
     pseudo: '',
@@ -13,6 +14,7 @@ const SignUp = () => {
 
   const [loginData, setLoginData] = useState(data);
   const [error, setError] = useState('')
+  const navigate = useNavigate();
 
   const handleChange = e => {
       setLoginData({...loginData, [e.target.id]: e.target.value })
@@ -24,6 +26,7 @@ const SignUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
     .then(user => {
         setLoginData({...data});
+        navigate('/Welcome')
     })
     .catch(error => {
       setError(error);
@@ -49,7 +52,7 @@ const SignUp = () => {
 
             {errorMsg}
 
-              <form>
+              <form onSubmit={handleSubmit}>
                 <h2>Register</h2>
                 <div className="inputBox">
                   <input onChange={handleChange} type="text" value={pseudo} id="pseudo" required />
@@ -72,6 +75,9 @@ const SignUp = () => {
                 </div>
                 {btn}
               </form>
+              <div className="linkContainer">
+                <Link className="simpleLink" to="/login">Already register? Login.</Link>
+              </div>
             </div>
           </div>
       </div>
